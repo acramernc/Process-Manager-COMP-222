@@ -1,28 +1,43 @@
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+
 public class Process {
     private int pID; //secure process ID, must be unique
     private String name;
     private String state; //Starts at ready, Ends at terminated
     private int timeSlice; //how long program should run at once
-    //TODO: initialize files and decide what data structure to use
+    Process next; //These are default access intentionally
+    Process prev;
+    LinkedList files;
 
     public Process(int pID, String name){
         this.pID = pID;
         this.name = name;
+        next = null;
+        prev = null;
         state = "ready";
         timeSlice = 1;
-        //TODO initialize files here as well
+        files = new LinkedList();
     }
 
     public void openFile(String newFile){
-        //TODO this should add a new file to the files structure
+        files.add(newFile);
     }
 
     public void closeFile (String fileName){
-        //TODO this should remove fileName from files, throw error if file doesnt exist
+        Iterator fileIter = files.listIterator(0);
+        while(fileIter.hasNext()){
+            if(fileIter.next() == fileName){
+                fileIter.remove();
+                return;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     public String toString(){
-        return "Process " + pID + "\t" + name + " " + state;
+        return "Process " + pID + "\t" + name + " " + state + " ";
     }
 
     public int getpID() {
@@ -56,4 +71,22 @@ public class Process {
     public void setTimeSlice(int timeSlice) {
         this.timeSlice = timeSlice;
     }
+
+    /*
+    public Process getNext() {
+        return next;
+    }
+
+    public void setNext(Process next) {
+        this.next = next;
+    }
+
+    public Process getPrev() {
+        return prev;
+    }
+
+    public void setPrev(Process prev) {
+        this.prev = prev;
+    }
+    */
 }
